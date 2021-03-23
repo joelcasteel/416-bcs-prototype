@@ -1,0 +1,11 @@
+{
+  "name": "best_community_service",
+  "version": "1.0.0",
+  "description": "416 Final Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joel Casteel",
+  "license": "MIT"
+}
