@@ -4,7 +4,9 @@
   "description": "416 Final Project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "heroku-postbuild": "cd bcs-client && npm install && npm run build"
   },
   "author": "Joel Casteel",
   "license": "MIT",
