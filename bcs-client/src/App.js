@@ -80,6 +80,10 @@ class App extends Component {
     return nextPage;
   }
 
+  componentDidMount() {
+    document.title = "Best Community Service";
+  }
+
 
 
   render() {
