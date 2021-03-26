@@ -1,0 +1,23 @@
+.donate_div {
+    text-align: center;
+}
+
+.donate_div p {
+    font-size: medium;
+}
+
+.donate_table {
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.donate_table th {
+    background-color: rgb(197, 197, 197);
+}
+
+.donate_table td, th {
+    padding: 25px;
+    font-size: large;
+}

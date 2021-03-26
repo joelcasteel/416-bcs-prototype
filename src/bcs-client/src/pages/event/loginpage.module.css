@@ -1,0 +1,35 @@
+div.details_div {
+    text-align:center;
+}
+
+.details_table {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+
+}
+
+.details_table th {
+    background-color: rgb(197, 197, 197);
+    font-size:x-large;
+    border-bottom: 1px solid black;
+    padding: 10px 50px;
+}
+
+.details_table tbody {
+    border-bottom: 1px solid black;
+}
+
+.details_table tfoot {
+    background-color: rgb(197, 197, 197);
+}
+#description {
+    text-align: left;
+    padding: 15px;
+}
+
+.info {
+    font-size: large;
+    padding: 15px;
+}

@@ -1,0 +1,55 @@
+.logindiv {
+    text-align: center;
+}
+
+.loginfeed {
+    text-align: center;
+    width: 35%;
+    margin: auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.loginfeed td {
+    padding: 10px;
+}
+
+#username {
+    text-align: left;
+    font-size: larger;
+}
+
+#password {
+    text-align: left;
+    font-size: larger;
+}
+
+.entry {
+    width:99%;
+    font-size:larger;
+}
+
+#buttonrow {
+    
+}
+
+#login_button_cell {
+    text-align: left;
+}
+
+#register_button_cell {
+    text-align: right;
+    
+}
+
+#loginbutton {
+    font-size: x-large;
+    font-style: bold;
+    width:60%;
+}
+
+#registerbutton {
+    font-size: medium;
+    font-style: bold;
+    width:60%;
+}

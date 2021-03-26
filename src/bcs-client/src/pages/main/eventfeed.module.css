@@ -1,0 +1,31 @@
+div.feedDiv {
+    text-align:center;
+}
+
+.eventfeed {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+
+}
+
+.eventfeed th {
+    background-color: rgb(197, 197, 197);
+    font-size:x-large;
+    border-bottom: 1px solid black;
+    padding: 10px 50px;
+}
+
+.eventfeed td {
+    padding: 10px 50px;
+}
+
+.eventfeed tr:nth-child(odd) {
+    background-color: white;
+}
+
+.eventfeed tr:nth-child(even) {
+    background-color: rgb(214, 214, 214);
+}
+

@@ -1,0 +1,22 @@
+table.navbar {
+    text-align: center;
+    background-color: rgb(199, 204, 247);
+    width: 100%;
+    table-layout: fixed;
+
+}
+
+table.navbar:td {
+    padding: 5px 50px;
+    font-size: large;
+    width: calc(100%/7);
+}
+
+table.navbar:td.logo {
+    text-align: left;
+    font-size: larger;
+}
+
+table.navbar:td.login {
+    text-align:right;
+}
