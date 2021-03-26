@@ -1,21 +1,25 @@
-const express = require('express');
-const app = express();
+var fs = require('fs');
+var express = require('express');
+var app = express();
+var path = require('path');
 
-const expressSanitizer = require('express-sanitizer');
-const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
-const path = require('path');
+app.use(express.static(path.join(__dirname, './bcs-client/build')));
 
-//mongoose.connect(process.env.DB_URI);
+/**
+ */
+app.get('/', (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, './bcs-client/build/index.html'));
+    } catch(error) {
+        console.log(error);
 
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
-app.use(expressSanitizer());
-app.use(cookieParser());
+    }
+    
+});
 
-//const accessTokenSecret = process.env.ACCESS_SECRET;
-
+var port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Merge Sort Demo running at: http://localhost:${port}`);
+});
 
 

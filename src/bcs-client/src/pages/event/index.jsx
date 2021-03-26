@@ -3,27 +3,7 @@ import { Redirect } from 'react-router';
 
 import styles from './loginpage.module.css';
 
-let testEvents = [
-    {
-        name: "Boa-Constrictor Live Strangling Demonstration (Ages 3+)",
-        type: "Community",
-        startTime: "2021-03-31 15:30:00",
-        endTime: "2021-03-31 16:30:00",
-        description: "Live swallowing of a baby deer.",
-        participants: 45,
-        planner: "Joe Dangerous"
-    },
-    {
-        name: "Bill and Ted's Excellent Wedding",
-        type: "Private",
-        startTime: "2021-05-31 18:00:00",
-        endTime: "2021-05-31 24:00:00",
-        participants: "40",
-        description: "A wonderful union for two awesome dudes.",
-        planner: "Abroham Lincoln"
-
-    }
-];
+let testEvents = require('../../testEvents.json').events;
 
 class EventPage extends Component {
 

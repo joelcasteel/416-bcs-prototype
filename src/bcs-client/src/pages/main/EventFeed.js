@@ -3,20 +3,7 @@ import {Link} from 'react-router-dom';
 
 import styles from './eventfeed.module.css'
 
-const testEvents = [
-    {
-        name: "Boa-Constrictor Live Strangling Demonstration (Ages 3+)",
-        type: "Community",
-        startTime: "2021-03-31 15:30:00",
-        endTime: "2021-03-31 16:30:00"
-    },
-    {
-        name: "Bill and Ted's Excellent Wedding",
-        type: "Private",
-        startTime: "2021-05-31 18:00:00",
-        endTime: "2021-05-31 24:00:00"
-    }
-]
+const testEvents = require('../../testEvents.json').events;
 
 class EventFeed extends Component {
 
@@ -29,7 +16,7 @@ class EventFeed extends Component {
     }
 
     eventList = () => {
-        return testEvents.map((testEvent, index) => (
+        return Object.values(testEvents).map((testEvent, index) => (
             <tr key={index}>
                 {this.eventLink(testEvent)}
                 <td>{testEvent.type}</td>

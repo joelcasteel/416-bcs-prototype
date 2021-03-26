@@ -3,26 +3,7 @@ import {Redirect} from 'react-router-dom';
 
 import styles from './planner.module.css';
 
-const testEvents = [
-    {
-        name: "Bill and Ted's Excellent Wedding",
-        start: "2021-05-31T18:00:00",
-        end: "2021-05-31T24:00:00",
-        participants: "40",
-        services: "Catering, DJ set, MC",
-        description: "A wonderful union for two awesome dudes."
-    },
-
-    {
-        name: "CS:GO LAN Party",
-        start: "2021-06-29 18:00:00",
-        end: "2021-06-30 8:00:00",
-        participants: "15",
-        services: "Internet, Tables, Chairs",
-        description: "Couple'a guys bein' dudes."
-    },
-
-];
+const testEvents = require('../../testEvents.json');
 
 class Planner extends Component {
 
@@ -149,17 +130,20 @@ class Planner extends Component {
     }
 
     eventFeed = () => {
-        return testEvents.map((testEvent, index) => (
-            <tr key={index}>
-                <td>{testEvent.name}</td>
-                <td>{new Date(testEvent.start).toUTCString()}</td>
-                <td>{new Date(testEvent.end).toUTCString()}</td>
-                <td>{testEvent.participants}</td>
-                <td>{testEvent.services}</td>
-                <td>{testEvent.description}</td>
-                <td key='edit'><button onClick={() => this.onEditClick(testEvent)}>Edit</button></td>
-            </tr>
-        ))
+        return testEvents.private.map((eventName, index) => {
+            let testEvent = testEvents.events[eventName];
+            return (
+                <tr key={index}>
+                    <td>{testEvent.name}</td>
+                    <td>{new Date(testEvent.startTime).toUTCString()}</td>
+                    <td>{new Date(testEvent.endTime).toUTCString()}</td>
+                    <td>{testEvent.participants}</td>
+                    <td>{testEvent.services}</td>
+                    <td>{testEvent.description}</td>
+                    <td key='edit'><button onClick={() => this.onEditClick(testEvent)}>Edit</button></td>
+                </tr>
+            )
+        })
     }
 
     render() {

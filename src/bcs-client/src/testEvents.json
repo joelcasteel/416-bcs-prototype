@@ -1,0 +1,93 @@
+{
+    "events" : {
+        "Boa-Constrictor Live Strangling Demonstration (Ages 3+)": {
+            "name": "Boa-Constrictor Live Strangling Demonstration (Ages 3+)",
+            "type": "Community",
+            "startTime": "2021-03-31 15:30:00",
+            "endTime": "2021-03-31 16:30:00",
+            "description": "Live swallowing of a baby deer.",
+            "participants": "45",
+            "planner": "Joe Dangerous",
+
+            "volunteerNeeds": "Need volunteers with strong necks who won't be strangled easily. Must be good at pulling kids out of snakes' mouths.",
+            "totalSlots": 5,
+            "remainingSlots": 3
+
+        },
+
+        "Bill and Ted's Excellent Wedding": {
+            "name": "Bill and Ted's Excellent Wedding",
+            "type": "Private",
+            "startTime": "2021-05-31 18:00:00",
+            "endTime": "2021-05-31 24:00:00",
+            "participants": "40",
+            "description": "A wonderful union for two awesome dudes.",
+            "planner": "Abroham Lincoln",
+
+            "services": "Catering, DJ set, MC"
+        },
+
+        "CS:GO LAN Party": {
+            "name": "CS:GO LAN Party",
+            "type": "Private",
+            "startTime": "2021-06-29 18:00:00",
+            "endTime": "2021-06-30 8:00:00",
+            "description": "Couple'a guys bein' dudes.",
+            "participants": "15",
+            "planner" : "Joel Casteel",
+
+            "services": "Internet, Tables, Chairs"
+            
+        },
+
+        "Flat-Earther Convention": {
+            "name": "Flat-Earther Convention",
+            "type": "Community",
+            "startTime": "2021-04-20 12:00:00",
+            "endTime": "2021-04-20 22:00:00",
+            "participants": "100",
+            "description": "A convention for truth seekers",
+            "planner": "Crey Z. Unkal",
+
+            "volunteerNeeds": "Looking for volunteers with healthy sense of doubt and skepticism. Must not be sheeple.",
+            "totalSlots": 10,
+            "remainingSlots": 9
+        },
+
+        "Esports Tournament": {
+            "name": "Esports Tournament",
+            "type": "Community",
+            "startTime": "2021-04-10 16:00:00",
+            "endTime": "2021-04-10 23:30:00",
+            "participants": 32,
+            "description": "Community Smash Bros Tourney",
+            "planner": "Joel Casteel",
+            
+            "volunteerNeeds": "Wanted. Volunteers to officiate Super Smash Bros Community Tournament. Must be understand rules and be capable of taking controllers from raging contestants.",
+            "totalSlots": 7,
+            "remainingSlots": 1
+        },
+
+        "Pottery Night": {
+            "name": "Pottery Night",
+            "type": "Community",
+            "startTime": "2021-05-1 18:00:00",
+            "endTime": "2021-05-2 24:00:00",
+            "participants": 24,
+            "description": "Come enjoy a fun pottery night for the whole family.",
+            "planner": "Mary Potts",
+
+            "volunteerNeeds": "Accepting application from volunteers who enjoy scultping clay into various shapes. This is NOT a harry potter themed event.",
+            "totalSlots": 4,
+            "remainingSlots": 2
+        }
+
+    },
+
+    "private" : [
+        "Bill and Ted's Excellent Wedding", "CS:GO LAN Party"
+    ],
+
+    "public" : [
+        "Boa-Constrictor Live Strangling Demonstration (Ages 3+)", "Esports Tournament", "Pottery Night", "Flat-Earther Convention" ]
+}
