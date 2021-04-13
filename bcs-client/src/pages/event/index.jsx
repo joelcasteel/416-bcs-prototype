@@ -9,17 +9,43 @@ class EventPage extends Component {
 
     constructor() {
         super();
-        let pathname = window.location.pathname.slice(7).replace(/%20/g, " ");
-        let currentEvent = null;
-        for (let i in testEvents) {
-            if (testEvents[i].name === pathname) {
-                currentEvent = testEvents[i];
-            }
-        }
+        let pathname = window.location.pathname.slice(7);
+        console.log(pathname);
 
         this.state = {
             pathname: pathname,
-            currentEvent: currentEvent
+            currentEvent: null,
+            eventLoaded: false,
+            error: null
+        }
+    }
+
+    async componentDidMount() {
+        try {
+            let response = await fetch(
+                '/api/event/' + this.state.pathname,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+            });
+            console.log(response);
+
+            let event = await response.json();
+
+            console.log(event);
+
+            this.setState({
+                eventLoaded: true,
+                currentEvent: event
+            });
+
+        } catch(error) {
+            console.log(error);
+            this.setState({
+                error:error
+            });
         }
     }
 
@@ -27,7 +53,7 @@ class EventPage extends Component {
     currentEventDisplay = () => {
         return (
             <div className={styles.details_div}>
-                <h1>{this.state.pathname}</h1>
+                <h1>{this.state.currentEvent.title}</h1>
                 <table className={styles.details_table}>
                     <thead>
                         <tr>
@@ -41,7 +67,7 @@ class EventPage extends Component {
                         <tr>
                             <td className={styles.info}>{new Date(this.state.currentEvent.startTime).toUTCString()}</td>
                             <td className={styles.info}>{new Date(this.state.currentEvent.endTime).toUTCString()}</td>
-                            <td className={styles.info}>{this.state.currentEvent.participants}</td>
+                            <td className={styles.info}>{this.state.currentEvent.maxSlots}</td>
                             <td className={styles.info}>{this.state.currentEvent.planner}</td>
                         </tr>
                     </tbody>
@@ -59,14 +85,22 @@ class EventPage extends Component {
     }
 
     render () {
-        if(this.state.currentEvent.type !== 'Private') {
+        if(this.state.eventLoaded && this.state.error === null) {
             return (
                 <div>
                     {this.currentEventDisplay()}
                 </div>
             )
+        } else if(this.state.error) {
+            return (
+                <div>
+                    Error fetching event
+                </div>
+            )
         } else {
-            return <Redirect to='/'/>
+            return (
+                <div>Loading event details</div>
+            )
         }
     }
 }
