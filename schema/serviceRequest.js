@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 const MUUID = require("uuid-mongodb").mode('relaxed');
 
-const RegSchema = new mongoose.Schema({
+const ServiceRequestSchema = new mongoose.Schema({
     _uuid: {
         type:'Object',
         unique: true,
@@ -14,7 +14,7 @@ const RegSchema = new mongoose.Schema({
         required: [true, 'Username required']
     },
 
-    eventID: {
+    serviceID: {
         type: String,
         required: [true, 'Event id required']
     },
@@ -23,16 +23,18 @@ const RegSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
+
 });
 
-RegSchema.methods.toJSON = function() {
+ServiceRequestSchema.methods.toJSON = function() {
     return {
         "_uuid": MUUID.from(this._uuid).toString(),
         "username": this.username,
-        "eventID": this.eventID,
+        "serviceID": this.eventID,
         "cardNumber": this.cardNumber
     };
-};
+}
 
-const RegModel = mongoose.model('Registration', RegSchema);
-module.exports = RegModel;
+const ServiceRequestModel = mongoose.model('ServiceRequest', ServiceRequestSchema);
+
+module.exports = ServiceRequestModel;

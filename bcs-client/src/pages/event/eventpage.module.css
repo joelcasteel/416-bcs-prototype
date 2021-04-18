@@ -2,6 +2,44 @@ div.details_div {
     text-align:center;
 }
 
+div.reg_div {
+    text-align:center;
+}
+
+.payment_table {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.payment_table td {
+    vertical-align: top;
+    width: 50%;
+    padding: 2%;
+}
+
+.new_payment {
+    text-align: center;
+}
+
+.reg_table {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.reg_table td {
+    vertical-align: top;
+    width: calc(100%/3);
+    padding: 2%;
+}
+
+
+
 .details_table {
     text-align: center;
     width: 80%;

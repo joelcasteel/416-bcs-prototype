@@ -87,11 +87,6 @@ class Planner extends Component {
         });
     }
 
-    redirectLogin = () => {
-        this.props.addNext('/planner');
-        return <Redirect to='/login'/>
-    }
-
     onEditClick = function(editEvent) {
 
 
@@ -147,7 +142,6 @@ class Planner extends Component {
     }
 
     render() {
-        if(this.props.loggedIn) {
             return (
                 <div>
                     <div className={styles.planner_div}>
@@ -200,13 +194,6 @@ class Planner extends Component {
                     </div>
                 </div>
             );
-        } else {
-            return (
-                <div>
-                    {this.redirectLogin()}
-                </div>
-            )
-        }
     }
 }
 

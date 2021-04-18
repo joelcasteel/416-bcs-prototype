@@ -4,22 +4,22 @@ import Select from 'react-select';
 
 import PaymentBar from '../payment';
 
-import styles from './eventpage.module.css';
+import styles from './servicepage.module.css';
 
 let testEvents = require('../../testEvents.json').events;
 
-class EventPage extends Component {
+class ServicePage extends Component {
 
     constructor() {
         super();
-        let pathname = window.location.pathname.slice(7);
+        let pathname = window.location.pathname.slice(9);
         console.log(pathname);
 
         this.state = {
             pathname: pathname,
 
-            currentEvent: null,
-            eventLoaded: false,
+            currentService: null,
+            serviceLoaded: false,
 
             paymentRequired: false,
             pmt: "",
@@ -27,13 +27,7 @@ class EventPage extends Component {
 
             payment: null,
             paymentProvided: "",
-            paymentLoaded: false,
-            paymentOptions: null,
 
-            cardNum: "",
-            cardName: "",
-            expirMonth: 1,
-            expirYear: 2021,
 
             error: null,
             message: "",
@@ -44,8 +38,8 @@ class EventPage extends Component {
     checkRegistered() {
         let username = sessionStorage.getItem("username");
 
-            for(let i in this.state.currentEvent.regs) {
-                let reg = this.state.currentEvent.regs[i];
+            for(let i in this.state.currentService.regs) {
+                let reg = this.state.currentService.regs[i];
                 console.log(reg);
                 if(reg.username === username) {
                     return true;
@@ -57,7 +51,7 @@ class EventPage extends Component {
     async componentDidMount() {
         try {
             let response = await fetch(
-                '/api/event/' + this.state.pathname,
+                '/api/service/' + this.state.pathname,
                 {
                     method: 'GET',
                     headers: {
@@ -66,14 +60,14 @@ class EventPage extends Component {
             });
             console.log(response);
 
-            let event = await response.json();
+            let service = await response.json();
 
-            console.log(event);
+            console.log(service);
 
 
             this.setState({
-                eventLoaded: true,
-                currentEvent: event
+                serviceLoaded: true,
+                currentService: service
             });
 
             this.checkPmtReq();
@@ -81,8 +75,8 @@ class EventPage extends Component {
         if(this.props.loggedIn) {
             console.log("HELLO");
             let username = sessionStorage.getItem("username");
-            for(let i in event.regs) {
-                let reg = event.regs[i];
+            for(let i in service.regs) {
+                let reg = service.regs[i];
                 console.log(reg);
                 if(reg.username === username) {
                     let card = reg.cardNum.slice(0,4) + " **** **** ****";
@@ -112,7 +106,7 @@ class EventPage extends Component {
 
 
     checkPmtReq() {
-        if(this.state.currentEvent.cost > 0) {
+        if(this.state.currentService.cost > 0) {
             this.setState({
                 paymentRequired: true
             });
@@ -138,7 +132,7 @@ class EventPage extends Component {
                         'Authorization':'Bearer ' + token
                     },
                     body: JSON.stringify({
-                        eventID: this.state.currentEvent._uuid,
+                        eventID: this.state.currentService._uuid,
                         cardNumber: this.state.payment
                     })
                 });
@@ -185,7 +179,7 @@ class EventPage extends Component {
                                     </td>
                                     <td>
                                         <b>Slots Taken</b><br/>
-                                        {this.state.currentEvent.count}/{this.state.currentEvent.maxSlots}
+                                        {this.state.currentService.count}/{this.state.currentService.maxSlots}
                                     </td>
                                     <td>
                                         <b>Payment Provided</b><br/>
@@ -200,7 +194,7 @@ class EventPage extends Component {
 
                 return (
                     <div className={styles.reg_div}>
-                        <h2>Register for Event</h2>
+                        <h2>Register for Service</h2>
                         <table className={styles.reg_table}>
                             <tbody>
                                 <tr>
@@ -210,7 +204,7 @@ class EventPage extends Component {
                                     </td>
                                     <td>
                                         <b>Slots Taken</b><br/>
-                                        {this.state.currentEvent.count}/{this.state.currentEvent.maxSlots}
+                                        {this.state.currentService.count}/{this.state.currentService.maxSlots}
                                     </td>
                                     <td>
                                         <b>Payment Required</b><br/>
@@ -238,34 +232,30 @@ class EventPage extends Component {
 
 
 
-    currentEventDisplay = () => {
+    currentServiceDisplay = () => {
         return (
             <div className={styles.details_div}>
-                <h1>{this.state.currentEvent.title}</h1>
+                <h1>{this.state.currentService.title}</h1>
                 <table className={styles.details_table}>
                     <thead>
                         <tr>
-                            <th key="start">Start Time</th>
-                            <th key="end">End Time</th>
-                            <th key="attendees">Max Attendees</th>
-                            <th key="planner">Planner</th>
+                            <th key="type">Service Type</th>
                             <th key="cost">Cost</th>
+                            <th key="costPeriod">Cost Period</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className={styles.info}>{new Date(this.state.currentEvent.startDate.toString()).toUTCString()}</td>
-                            <td className={styles.info}>{new Date(this.state.currentEvent.endDate.toString()).toUTCString()}</td>
-                            <td className={styles.info}>{this.state.currentEvent.maxSlots}</td>
-                            <td className={styles.info}>{this.state.currentEvent.planner}</td>
-                            <td className={styles.info}>${this.state.currentEvent.cost}</td>
+                        <tr> 
+                            <td className={styles.info}>{this.state.currentService.type}</td>
+                            <td className={styles.info}>{this.state.currentService.cost}</td>
+                            <td className={styles.info}>{this.state.currentService.costPeriod}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td id={styles.description} colSpan='5'>
+                            <td id={styles.description} colSpan='3'>
                                 <b>Description:</b><br/>
-                                <p>{this.state.currentEvent.description}</p>
+                                <p>{this.state.currentService.description}</p>
                             </td>
                         </tr>
                     </tfoot>
@@ -275,10 +265,10 @@ class EventPage extends Component {
     }
 
     render () {
-        if(this.state.eventLoaded && this.state.error === null) {
+        if(this.state.serviceLoaded && this.state.error === null) {
             return (
                 <div>
-                    {this.currentEventDisplay()}
+                    {this.currentServiceDisplay()}
                     <br/><br/>
                     {this.registration()}
                 </div>
@@ -286,15 +276,15 @@ class EventPage extends Component {
         } else if(this.state.error) {
             return (
                 <div>
-                    Error fetching event
+                    Error fetching service
                 </div>
             )
         } else {
             return (
-                <div>Loading event details</div>
+                <div>Loading service details</div>
             )
         }
     }
 }
 
-export default EventPage;
+export default ServicePage;

@@ -11,6 +11,7 @@ class LoginPage extends Component {
         username: null,
         password: null,
         loggedIn: false,
+        error: null
     }
 
     onUsernameChange = event => {
@@ -25,15 +26,80 @@ class LoginPage extends Component {
         });
     }
 
-    onLoginButton = event => {
+    onLoginButton = async (event) => {
         if(this.state.username && this.state.password) {
-            this.props.onLoginSubmit(this.state.username, this.state.password);
+            try {
+                let response = await fetch('/login', {
+                    'method': "POST",
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    },
+                    'body': JSON.stringify({
+                        'username': this.state.username,
+                        'password': this.state.password
+                    })
+                });
+
+                if(response.status === 201) {
+                    let body = await response.json();
+                    sessionStorage.setItem("token", body.token);
+                    let token = {};
+
+                    token.header = JSON.parse(window.atob(body.token.split('.')[0]));
+                    token.payload = JSON.parse(window.atob(body.token.split('.')[1]));
+
+                    sessionStorage.setItem("username", token.payload.username);
+                    sessionStorage.setItem("role", token.payload.role);
+
+                    this.props.onLoginSubmit(token.payload.username, token.payload.role);
+                }
+
+            } catch(error) {
+                console.log(error);
+                this.setState({
+                    error: error
+                });
+
+            }
         }
     }
 
-    onRegisterButton = event => {
+    onRegisterButton = async (event) => {
         if(this.state.username && this.state.password) {
-            this.props.onRegisterSubmit(this.state.username, this.state.password);
+            try {
+                let response = await fetch('/register', {
+                    'method': "POST",
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    },
+                    'body': JSON.stringify({
+                        'username': this.state.username,
+                        'password': this.state.password
+                    })
+                });
+
+                if(response.status === 201) {
+                    let body = await response.json();
+                    sessionStorage.setItem("token", body.token);
+
+                    let token = {}
+
+                    token.header = JSON.parse(window.atob(body.token.split('.')[0]));
+                    token.payload = JSON.parse(window.atob(body.token.split('.')[1]));
+
+                    sessionStorage.setItem("username", token.payload.username);
+                    sessionStorage.setItem("role", token.payload.role);
+
+                    this.props.onRegisterSubmit(token.payload.username, token.payload.role);
+                }
+
+            } catch(error) {
+                console.log(error);
+                this.setState({
+                    error: error
+                });
+
+            }
         }
     }
 

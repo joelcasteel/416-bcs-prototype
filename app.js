@@ -72,7 +72,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    if(!('username' in req.body) || !('password' in req.body) || !('fullName' in req.body)) {
+    if(!('username' in req.body) || !('password' in req.body)) {
         return res.status(400).send("Credentials Missing");
     }
 
@@ -94,7 +94,6 @@ app.post('/register', async (req, res) => {
 
         let newUser = await User.create({
             username: req.body.username,
-            fullName: req.body.fullName,
             password: pwd,
             payment: [],
             role: newRole
@@ -124,7 +123,7 @@ app.post('/register', async (req, res) => {
 
 /**
  */
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     try {
         res.set({'Content-Type':'text/html'}).sendFile(path.join(__dirname, './bcs-client/build/index.html'));
     } catch(error) {
@@ -134,7 +133,7 @@ app.get('/', (req, res) => {
     
 });
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3030;
 app.listen(port, () => {
     console.log(`Best Community Service server running at: http://localhost:${port}`);
 });

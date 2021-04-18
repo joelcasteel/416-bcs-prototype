@@ -1,6 +1,7 @@
 import React from 'react';
 
 import EventFeed from './EventFeed';
+import ServiceFeed from './ServiceFeed';
 
 const MainPage = () => (
     <div>
@@ -13,6 +14,10 @@ const MainPage = () => (
         <br/><br/>
         <h2>Event Schedule</h2>
         <EventFeed/>
+        <br/>
+        <br/>
+        <h2>Services Provided</h2>
+        <ServiceFeed/>
     </div>
 )
 

@@ -3,18 +3,18 @@ import {Link} from 'react-router-dom';
 
 import styles from './eventfeed.module.css'
 
-class EventFeed extends Component {
+class ServiceFeed extends Component {
 
     state = {
-        eventsLoaded: false,
-        events: null,
+        servicesLoaded: false,
+        services: null,
         error: null
     }
 
     async componentDidMount() {
         try {
             let response = await fetch(
-                '/api/event',
+                '/api/service',
                 {
                     method: 'GET',
                     headers: {
@@ -23,13 +23,13 @@ class EventFeed extends Component {
             });
             console.log(response);
 
-            let events = await response.json();
+            let services = await response.json();
 
-            console.log(events);
+            console.log(services);
 
             this.setState({
-                eventsLoaded: true,
-                events: events
+                servicesLoaded: true,
+                services: services
             });
 
         } catch(error) {
@@ -41,57 +41,55 @@ class EventFeed extends Component {
 
     }
 
-    eventLink = (srcEvent) => {
-        return <td><Link to={'/event/' + srcEvent._uuid}>{srcEvent.title}</Link></td>
+    serviceLink = (srcService) => {
+        return <td><Link to={'/service/' + srcService._uuid}>{srcService.title}</Link></td>
     }
 
-    eventList = () => {
-        return this.state.events.map((event, index) => {
+    serviceList = () => {
+        return this.state.services.map((service, index) => {
             
-            let start = new Date(event.startDate.toString());
-            let end = new Date(event.endDate.toString());
+            
 
             return (
                 <tr key={index}>
-                    {this.eventLink(event)}
-                    <td>{event.description}</td>
-                    <td>{start.toUTCString()}</td>
-                    <td>{end.toUTCString()}</td>
+                    {this.serviceLink(service)}
+                    <td>{service.description}</td>
+                    <td>{service.cost}</td>
+                    <td>{service.costPeriod}</td>
                 </tr>
             )
         });
     }
 
-
     render() {
-        if(this.state.eventsLoaded && this.state.error === null) {
+        if(this.state.servicesLoaded && this.state.error === null) {
             return (
                 <div className="feedDiv">
                     <table className={styles.eventfeed}>
                         <thead>
                             <tr>
-                                <th key='eventName'>Event Name</th>
-                                <th key='eventdescript'>Event Type</th>
-                                <th key='startTime'>Start Time</th>
-                                <th key='endTime'>End Time</th>
+                                <th key='serviceName'>Service Name</th>
+                                <th key='serviceDescript'>Service Type</th>
+                                <th key='serviceCost'>Service Cost </th>
+                                <th key='servicePeriod'>Cost Period</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.eventList()}
+                            {this.serviceList()}
                         </tbody>
                     </table>
                 </div>
             )
         } else if(this.state.error) {
             return (
-                <div>Error Loading Events</div>
+                <div>Error Loading Services</div>
             );
         } else {
             return (
-                <div>Loading Events</div>
+                <div>Loading services</div>
             )
         }
     }
 }
 
-export default EventFeed;
+export default ServiceFeed;

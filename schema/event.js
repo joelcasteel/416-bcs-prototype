@@ -52,7 +52,20 @@ const EventSchema = new mongoose.Schema ({
     cost: {
         type: Number,
         default: 0.0
-    }
+    },
+
+    count: {
+        type: Number,
+        default: 0
+    },
+        
+    regs: {
+        type: [{
+            username: String,
+            cardNum: String
+        }],
+        default: []
+        }
 
 });
 
@@ -65,7 +78,9 @@ EventSchema.methods.toJSON = function() {
         "startDate": this.startDate,
         "endDate": this.endDate,
         "maxSlots": this.maxSlots,
-        "cost": this.cost
+        "cost": this.cost,
+        "regs": this.regs,
+        "count": this.count
     };
 };
 

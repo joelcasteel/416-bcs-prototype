@@ -15,6 +15,7 @@ var MUUID = require("uuid-mongodb").mode('relaxed');
 var User = require('./schema/user');
 var Event = require('./schema/event');
 var Registration = require('./schema/registration');
+var Service = require('./schema/service');
 
 const auth = require('./auth/token');
 const role = require('./auth/role');
@@ -95,6 +96,7 @@ router.get('/event', async (req, res) => {
     }
 
 });
+
 
 /**
  * Event - GET with UUID
@@ -208,6 +210,74 @@ router.delete('/event/:uuid', auth.checkToken, role.checkAdmin, async(req, res) 
     }
 });
 
+router.get('/service', async(req, res) => {
+    try {
+        let result = await Service.find({});
+        console.log(result);
+
+        if(result != null) {
+            let services = [];
+            for(let i in result) {
+                services.push(result[i].toJSON());
+            }
+
+            return res.status(200).set({'Content-Type': 'application/json'}).send(JSON.stringify(services));
+        }
+
+        return res.status(404).send('No services found');
+
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Error finding services.");
+
+    }
+});
+
+router.post('/service', auth.checkToken, role.checkAdmin, async(req, res) => {
+    try {
+
+        let service = new Service({
+            "title": req.body.title,
+            "description": req.body.description,
+            "type": req.body.type,
+            "cost": parseFloat(req.body.cost),
+            "costPeriod": req.body.costPeriod
+        });
+        let newService = service.save();
+
+        return res.status(201).send("success");
+
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Error saving services.");
+    }
+});
+
+/**
+ * Event - GET with UUID
+ */
+router.get('/service/:uuid', async (req, res) => {
+    try {
+        const uuid = MUUID.from(req.params.uuid);
+
+        let service = await Service.findOne({'_uuid':uuid});
+
+        if(service != null) {
+            return res.status(200).set({'Content-Type': 'application/json'}).send(JSON.stringify(service));
+        }
+
+        return res.status(404).send("Event not found");
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send("Error retrieving event");
+
+    }
+});
+
+
 
 /**
  * Registration - GET
@@ -281,6 +351,60 @@ router.get('/registration/:uuid', auth.checkToken, async(req, res) => {
 /**
  * Registration - POST
  */
+router.post('/reg', auth.checkToken, async(req, res) => {
+    console.log(req.body);
+    if(!('eventID' in req.body)) {
+        return res.status(400).send("Missing values");
+    }
+
+    let cardNumber = "";
+    if('cardNumber' in req.body) {
+        cardNumber = req.body.cardNumber;
+
+    }
+
+    try {
+        const uuid = MUUID.from(req.body.eventID);
+        let event = await Event.findOne({'_uuid': uuid});
+        if(event != null) {
+
+            if(event.count < event.maxSlots ){
+                
+            let update = await event.update({
+                "$push": { "regs" :{
+                    'username': req.username,
+                    'cardNum': cardNumber
+                }},
+                "$set": {
+                    'count': event.count+1
+                }
+            });
+
+            if(update != null) {
+                return res.status(201).send("Payment added successfully");
+            }
+
+            return res.status(500).send("Error adding payment");
+
+        }
+
+        return res.status(409).send("Event at max capacity");
+
+        }
+        return res.status(404).send("Could not find user payment methods");
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send("Error fetching payments");
+    }
+
+
+
+});
+
+/**
+ * Registration - POST
+ */
 router.post('/registration', auth.checkToken, async(req, res) => {
     if(!('username' in req.body) || !('eventID' in req.body)) {
         return res.status(400).send("Missing values");
@@ -296,6 +420,9 @@ router.post('/registration', auth.checkToken, async(req, res) => {
         }
 
     }
+
+    //Add subscriptions to the event
+    //let event = await Event.findOne({'_uuid':req.body.eventID});
 
     let reg = new Registration({
         'username': req.body.username,
@@ -341,5 +468,55 @@ router.delete('/registration/:uuid', auth.checkToken, async(req, res) => {
     }
 
 });
+
+router.get('/payment', auth.checkToken, async(req, res) => {
+    try {
+        let user = await User.findOne({'username': req.username});
+        if(user != null) {
+            return res.status(200).set({'Content-Type': 'application/json'}).send(JSON.stringify(user.payment));
+
+        }
+        return res.status(404).send("Could not find user payment methods");
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send("Error fetching payments");
+    }
+});
+
+router.post('/payment', auth.checkToken, async(req, res) => {
+    if(!('cardNum' in req.body) || !('name' in req.body) || !('expirMonth' in req.body) || !('expirYear' in req.body)) {
+        return res.status(400).send('Missing payment info');
+    }
+
+    try {
+        let user = await User.findOne({'username': req.username});
+        if(user != null) {
+            user.payment.push({
+                'cardNum': req.body.cardNum,
+                'name': req.body.name,
+                'expirMonth': req.body.expirMonth,
+                'expirYear': req.body.expirYear
+            });
+
+            let update = await user.save();
+            if(update != null) {
+                return res.status(201).send("Payment added successfully");
+            }
+
+            return res.status(500).send("Error adding payment");
+
+        }
+        return res.status(404).send("Could not find user payment methods");
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send("Error fetching payments");
+    }
+});
+
+router.get('/check', auth.checkToken, (req, res) => {
+    return res.status(200).send("signed in");
+})
 
 module.exports = router;

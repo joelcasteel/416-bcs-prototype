@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
 
     fullName: {
         type: String,
-        required: [true, "Full name required"]
+        default: ""
     },
 
     password: {
@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
 
     payment: {
         type: [{
-            cardNum: Number,
+            cardNum: String,
             name: String,
             expirMonth: Number,
             expirYear: Number,
