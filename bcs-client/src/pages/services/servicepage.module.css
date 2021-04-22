@@ -71,3 +71,7 @@ div.reg_div {
     font-size: large;
     padding: 15px;
 }
+
+.detail_entry {
+    width: 80%;
+}

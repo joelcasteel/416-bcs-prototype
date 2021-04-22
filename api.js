@@ -277,6 +277,46 @@ router.get('/service/:uuid', async (req, res) => {
     }
 });
 
+router.post('/sub', auth.checkToken, async (req, res) => {
+    console.log(req.body);
+    if(!('serviceID' in req.body)) {
+        return res.status(400).send("Missing values");
+    }
+
+    let cardNumber = "";
+    if('cardNumber' in req.body) {
+        cardNumber = req.body.cardNumber;
+    }
+
+    try {
+        const uuid = MUUID.from(req.body.serviceID);
+        let service = await Service.findOne({'_uuid': uuid});
+        if(service != null) {
+                
+            let update = await service.update({
+                "$push": { "regs" :{
+                    'username': req.username,
+                    'cardNum': cardNumber,
+                    'detail': req.body.detail
+                }}
+            });
+
+            if(update != null) {
+                return res.status(201).send("Payment added successfully");
+            }
+
+            return res.status(500).send("Error adding payment");
+
+
+        }
+        return res.status(404).send("Could not find user payment methods");
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send("Error fetching payments");
+    }
+});
+
 
 
 /**

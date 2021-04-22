@@ -7,7 +7,8 @@ import'./navbar.css';
 class NavBar extends Component {
 
     state = {
-        //loggedIn: false
+        loggedIn: this.props.loggedIn,
+        isAdmin: this.props.role === "admin"
     }
 
     onLogoutclick = event => {
@@ -35,8 +36,10 @@ class NavBar extends Component {
                             <td className='logo' key='logo'><b>Best Community Service</b></td>
                             <td key='pad0'></td>
                             <td key='home'><Link to="/"><b>Home</b></Link></td>
-                            <td key='planner'><Link to="/planner"><b>Event Planner</b></Link></td>
-                            <td key='volunteer'><Link to="/volunteer"><b>Volunteer</b></Link></td>
+                            {this.props.role === "admin" &&
+                                <td key='planner'><Link to="/planner"><b>Event Planner</b></Link></td>
+                                
+                            }
                             <td key='donate'><Link to="/donate"><b>Donate</b></Link></td>
                             <td key='pad1'></td>
                             <td className='login' key='login'>{this.loginText()}</td>

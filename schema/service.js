@@ -38,7 +38,8 @@ const ServiceSchema = new mongoose.Schema({
     regs: {
         type: [{
             username: String,
-            cardNum: String
+            cardNum: String,
+            detail: String
         }],
         default: []
     }

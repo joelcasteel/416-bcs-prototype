@@ -23,6 +23,9 @@ class ServicePage extends Component {
 
             paymentRequired: false,
             pmt: "",
+
+            detail: "",
+            detailProvided: "",
             
 
             payment: null,
@@ -79,7 +82,10 @@ class ServicePage extends Component {
                 let reg = service.regs[i];
                 console.log(reg);
                 if(reg.username === username) {
-                    let card = reg.cardNum.slice(0,4) + " **** **** ****";
+                    let card = "";
+                    if(reg.cardNum !== null) {
+                        card = reg.cardNum.slice(0,4) + " **** **** ****";
+                    }
                     this.setState({
                         registered: true,
                         paymentProvided: card
@@ -120,26 +126,35 @@ class ServicePage extends Component {
         return ""
     }
 
+    onDetailUpdate = event => {
+        this.setState({
+            detail: event.target.value
+        });
+    }
+
     onRegisterSubmit = async (event) => {
         try {
             console.log(this.state.payment);
             if(this.state.payment !== null || !this.state.paymentRequired){
                 let token = window.sessionStorage.getItem('token');
-                let response = await fetch('/api/reg', {
+                let response = await fetch('/api/sub', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization':'Bearer ' + token
                     },
                     body: JSON.stringify({
-                        eventID: this.state.currentService._uuid,
-                        cardNumber: this.state.payment
+                        serviceID: this.state.currentService._uuid,
+                        cardNumber: this.state.payment,
+                        detail: this.state.detail,
                     })
                 });
+                console.log(response);
                 if(response.status === 201) {
                     this.setState({
                         message: "Registration added.",
-                        registered: true
+                        registered: true,
+                        detailProvided: this.state.detail
                     })
                 }
             } else if(this.state.paymentRequired) {
@@ -169,7 +184,7 @@ class ServicePage extends Component {
             if(this.state.registered) {
                 return (
                     <div>
-                        <h3>Already Registered for Event</h3>
+                        <h3>Registered for Service</h3>
                         <table className={styles.reg_table}>
                             <tbody>
                                 <tr>
@@ -178,8 +193,8 @@ class ServicePage extends Component {
                                         {username}
                                     </td>
                                     <td>
-                                        <b>Slots Taken</b><br/>
-                                        {this.state.currentService.count}/{this.state.currentService.maxSlots}
+                                        <b>Note</b><br/>
+                                        {this.state.detailProvided}
                                     </td>
                                     <td>
                                         <b>Payment Provided</b><br/>
@@ -203,8 +218,8 @@ class ServicePage extends Component {
                                         {username}
                                     </td>
                                     <td>
-                                        <b>Slots Taken</b><br/>
-                                        {this.state.currentService.count}/{this.state.currentService.maxSlots}
+                                        <b>Note</b><br/>
+                                        <textarea width="64" height="3" className={styles.detail_entry} value={this.state.detail} onChange={this.onDetailUpdate}/>
                                     </td>
                                     <td>
                                         <b>Payment Required</b><br/>
@@ -247,7 +262,7 @@ class ServicePage extends Component {
                     <tbody>
                         <tr> 
                             <td className={styles.info}>{this.state.currentService.type}</td>
-                            <td className={styles.info}>{this.state.currentService.cost}</td>
+                            <td className={styles.info}>${this.state.currentService.cost}</td>
                             <td className={styles.info}>{this.state.currentService.costPeriod}</td>
                         </tr>
                     </tbody>

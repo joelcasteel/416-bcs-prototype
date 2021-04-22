@@ -153,7 +153,7 @@ class PaymentBar extends Component {
                             />
                         </td>
                         <td colSpan="1" className={styles.new_payment}>
-                            <h3>Add New Payment Method</h3><br/>
+                            <h3>Add New Payment Method</h3>
 
                             <p>{this.state.message}</p>
 

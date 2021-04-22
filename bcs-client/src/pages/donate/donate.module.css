@@ -7,7 +7,7 @@
 }
 
 .donate_table {
-    text-align: center;
+    text-align: left;
     width: 50%;
     margin: auto;
     border-collapse: collapse;
@@ -20,4 +20,8 @@
 .donate_table td, th {
     padding: 25px;
     font-size: large;
+}
+
+.donate_name {
+    width: 99%
 }

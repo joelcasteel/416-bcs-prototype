@@ -85,7 +85,10 @@ class EventPage extends Component {
                 let reg = event.regs[i];
                 console.log(reg);
                 if(reg.username === username) {
-                    let card = reg.cardNum.slice(0,4) + " **** **** ****";
+                    let card = "";
+                    if(reg.cardNum !== null) {
+                        card = reg.cardNum.slice(0,4) + " **** **** ****";
+                    }
                     this.setState({
                         registered: true,
                         paymentProvided: card
@@ -128,8 +131,11 @@ class EventPage extends Component {
 
     onRegisterSubmit = async (event) => {
         try {
-            console.log(this.state.payment);
             if(this.state.payment !== null || !this.state.paymentRequired){
+                let pmt = "";
+                if(this.state.payment !== null ) {
+                    pmt = this.state.payment;
+                }
                 let token = window.sessionStorage.getItem('token');
                 let response = await fetch('/api/reg', {
                     method: 'POST',
@@ -139,7 +145,7 @@ class EventPage extends Component {
                     },
                     body: JSON.stringify({
                         eventID: this.state.currentEvent._uuid,
-                        cardNumber: this.state.payment
+                        cardNumber: pmt
                     })
                 });
                 if(response.status === 201) {

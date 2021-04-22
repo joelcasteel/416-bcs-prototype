@@ -101,7 +101,8 @@ class App extends Component {
     if(response.status === 200) {
       this.setState({
         loggedIn:true,
-        username: window.sessionStorage.getItem("username")
+        username: window.sessionStorage.getItem("username"),
+        role: window.sessionStorage.getItem("role")
       });
     }
     } catch(error) {
@@ -117,7 +118,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <NavBar username={this.state.username} loggedIn={this.state.loggedIn} onLogoutSubmit={this.onLogoutSubmit}/>
+          <NavBar username={this.state.username} loggedIn={this.state.loggedIn} role={this.state.role} onLogoutSubmit={this.onLogoutSubmit}/>
           <Switch>
             <Route exact path="/" component={MainPage}/>
             <Route exact path="/login" render={() =>
@@ -126,14 +127,24 @@ class App extends Component {
             <Route exact path="/planner" render={() =>{
 
               if(this.state.loggedIn) {
-                return <Planner addNext={this.addNext} loggedIn={this.state.loggedIn}/>
+                if(this.state.role == "admin") {
+                  return <Planner addNext={this.addNext} loggedIn={this.state.loggedIn} username={this.state.username}/>
+
+                } else {
+                  return (
+                    <div>
+                      <h1>You are not authorized to access the planner</h1>
+                      <Link to="/">Return to homepage.</Link>
+                    </div>
+                  )
+
+                }
               } else {
                 return <LoginPage popNext={this.popNext} loggedIn={this.state.loggedIn} onLoginSubmit={this.onLoginSubmit} onRegisterSubmit={this.onRegisterSubmit}/>
               }
             }}/>
-            <Route exact path="/volunteer" render={() =>
-              <VolunteerPage addNext={this.addNext} loggedIn={this.state.loggedIn}/>
-            }/>
+
+
             <Route exact path="/donate" component={DonationPage}/>
             <Route path="/event" render={() => 
               <EventPage loggedIn={this.state.loggedIn}/>
